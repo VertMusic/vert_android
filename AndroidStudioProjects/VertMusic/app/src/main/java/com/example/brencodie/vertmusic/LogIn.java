@@ -98,7 +98,7 @@ public class LogIn extends ActionBarActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.i("Login", "Error: " + error.toString());
                         ///TODO: let user know login failed
-                        errorText.setText("That didn't work!");
+                        //errorText.setText("That didn't work!");
                     }
                 });
 

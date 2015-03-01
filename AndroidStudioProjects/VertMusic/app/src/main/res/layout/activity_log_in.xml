@@ -18,7 +18,7 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/prompt_email"
+            android:hint="@string/prompt_username"
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:singleLine="true"
@@ -68,6 +68,7 @@
         android:layout_below="@+id/LogInForm"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="52dp"
-        android:text="@string/errorText" />
+        android:text="@string/errorText"
+        android:visibility="invisible" />
 
 </RelativeLayout>

@@ -13,10 +13,10 @@ import static com.example.brencodie.vertmusic.R.id.*;
 
 import com.android.volley.RequestQueue;
 
+import org.json.JSONObject;
+
 
 public class RegisterActivity extends ActionBarActivity {
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
