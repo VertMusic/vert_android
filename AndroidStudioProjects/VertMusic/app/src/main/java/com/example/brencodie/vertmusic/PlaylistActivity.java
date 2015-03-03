@@ -2,14 +2,11 @@ package com.example.brencodie.vertmusic;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,7 +30,6 @@ public class PlaylistActivity extends ListActivity {
     private String userId;
     private JSONArray playlistInfo;
     private String playlistList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +57,14 @@ public class PlaylistActivity extends ListActivity {
                             playlistInfo = response.getJSONArray("playlists");
 
                             ArrayList<String> playlistList = new ArrayList<String>();
-                            setListAdapter(new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, playlistList));
+                            for (int i = 0; i < playlistInfo.length(); i++) {
+                                String playlistName = playlistInfo.getJSONObject(i).getString("name");
+                                playlistList.add(playlistName);
+                                Log.i("Name of playlist:", playlistName);
+                            }
 
-
-                                JSONObject objects = playlistInfo.getJSONObject(0);
-                                JSONObject objects2 = playlistInfo.getJSONObject(1);
-
-                            TextView testText = (TextView) findViewById(R.id.testText);
-                            testText.setText(objects.getString("name"));
-
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getListView().getContext(), android.R.layout.simple_list_item_1, playlistList);
+                            getListView().setAdapter(adapter);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
