@@ -29,7 +29,8 @@ public class PlaylistActivity extends ListActivity {
     private String accessToken;
     private String userId;
     private JSONArray playlistInfo;
-    private String playlistList;
+    private ArrayList songList;
+    private ArrayList playlistList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +57,15 @@ public class PlaylistActivity extends ListActivity {
                         try {
                             playlistInfo = response.getJSONArray("playlists");
 
-                            ArrayList<String> playlistList = new ArrayList<String>();
+                            playlistList = new ArrayList<String>();
+
                             for (int i = 0; i < playlistInfo.length(); i++) {
                                 String playlistName = playlistInfo.getJSONObject(i).getString("name");
                                 playlistList.add(playlistName);
                                 Log.i("Name of playlist:", playlistName);
                             }
+
+                            getSongs(playlistInfo);
 
                             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getListView().getContext(), android.R.layout.simple_list_item_1, playlistList);
                             getListView().setAdapter(adapter);
@@ -89,6 +93,22 @@ public class PlaylistActivity extends ListActivity {
             }
         };
         queue.add(request);
+    }
+
+    private void getSongs(JSONArray playlistInfo) {
+
+        songList = new ArrayList<String>();
+        for (int i = 0; i < playlistInfo.length(); i++) {
+            try {
+                for (int j = 0; j < playlistInfo.getJSONObject(i).getJSONArray("songs").length(); j++) {
+                    songList.add(playlistInfo.getJSONObject(0).getJSONArray("songs").getString(j));
+                    Log.i("Name of song:", j + " " + songList.get(j).toString());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @Override

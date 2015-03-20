@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/playlist">
+    android:id="@+id/playlist"
+    android:background="#ff333333"
+    android:clickable="false">
 
     <ListView
         android:id="@android:id/list"

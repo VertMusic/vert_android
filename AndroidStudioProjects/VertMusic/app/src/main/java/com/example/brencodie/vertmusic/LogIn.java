@@ -29,8 +29,6 @@ public class LogIn extends ActionBarActivity {
 
     public final static String ACCESS_TOKEN = "com.example.brencodie.ACCESS";
     public final static String USER_ID = "com.example.brencodie.ID";
-
-    private TextView errorText;
     private String accessTokenValue;
     private String userIdValue;
     private JSONObject logInfo;
@@ -47,9 +45,11 @@ public class LogIn extends ActionBarActivity {
         startActivity(intent);
     }
 
+    /*
+     * Handle log-in.
+     */
     public void onSignInClick(View view) {
         final Intent intent = new Intent(this, PlaylistActivity.class);
-        errorText = (TextView) findViewById(R.id.errorText); // Changes text based on server response
         EditText user = (EditText) findViewById(R.id.email); // Assign variable user to the e-mail id
         EditText pass = (EditText) findViewById(R.id.password); // Assign variable pass to the password id
         String usernameValue = user.getText().toString(); // Convert user text field into string and assign to usernameValue
