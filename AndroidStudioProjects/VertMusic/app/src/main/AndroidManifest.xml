@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.brencodie.vertmusic" >
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -32,6 +33,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brencodie.vertmusic.LogIn" />
+        </activity>
+        <activity
+            android:name=".SongActivity"
+            android:label="@string/title_activity_song" >
         </activity>
     </application>
 

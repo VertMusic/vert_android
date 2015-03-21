@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,8 +32,10 @@ public class PlaylistActivity extends ListActivity {
     private String accessToken;
     private String userId;
     private JSONArray playlistInfo;
-    private ArrayList songList;
-    private ArrayList playlistList;
+    private ArrayList<String> songIdList;
+    private ArrayList<String> playlistList;
+    private ArrayAdapter<String> adapter;
+    //public final static String SONG_URL = "com.example.brencodie.songurl";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,10 @@ public class PlaylistActivity extends ListActivity {
         setContentView(R.layout.activity_playlist);
         Intent intent = getIntent();
         getPlaylists(intent);
+
+        handleSongURL();
+
+
     }
 
     private void getPlaylists(Intent intent) {
@@ -57,18 +66,18 @@ public class PlaylistActivity extends ListActivity {
                         try {
                             playlistInfo = response.getJSONArray("playlists");
 
-                            playlistList = new ArrayList<String>();
+                            playlistList = new ArrayList();
 
                             for (int i = 0; i < playlistInfo.length(); i++) {
                                 String playlistName = playlistInfo.getJSONObject(i).getString("name");
                                 playlistList.add(playlistName);
-                                Log.i("Name of playlist:", playlistName);
+                                // Log.i("Name of playlist:", playlistName);
                             }
 
-                            getSongs(playlistInfo);
-
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getListView().getContext(), android.R.layout.simple_list_item_1, playlistList);
+                            adapter = new ArrayAdapter(getListView().getContext(), android.R.layout.simple_list_item_1, playlistList);
                             getListView().setAdapter(adapter);
+
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -83,7 +92,7 @@ public class PlaylistActivity extends ListActivity {
                         // TODO Auto-generated method stub
                         Log.i("Playlist", "Error: " + error.toString());
                     }
-            })
+                })
         {
             @Override
             public Map<String, String> getHeaders() {
@@ -95,21 +104,55 @@ public class PlaylistActivity extends ListActivity {
         queue.add(request);
     }
 
-    private void getSongs(JSONArray playlistInfo) {
+    private void handleSongURL() {
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        songList = new ArrayList<String>();
-        for (int i = 0; i < playlistInfo.length(); i++) {
-            try {
-                for (int j = 0; j < playlistInfo.getJSONObject(i).getJSONArray("songs").length(); j++) {
-                    songList.add(playlistInfo.getJSONObject(0).getJSONArray("songs").getString(j));
-                    Log.i("Name of song:", j + " " + songList.get(j).toString());
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " is selected. Position number: " + position, Toast.LENGTH_LONG).show();
+                String playlistName = parent.getItemAtPosition(position).toString();
+                songIdList = new ArrayList();
+
+                for (int i = 0; i < playlistInfo.length(); i++) {
+                    try {
+                        if (playlistName.equals(playlistInfo.getJSONObject(i).getString("name"))) {
+
+                            if (playlistInfo.getJSONObject(i).getJSONArray("songs").length() >= 1) {
+                                try {
+                                    for (int j = 0; j < playlistInfo.getJSONObject(i).getJSONArray("songs").length(); j++) {
+                                        songIdList.add(playlistInfo.getJSONObject(i).getJSONArray("songs").getString(j));
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                String url = "http://192.168.56.101:8080/vert/data/songs?";
+                                for (String songId : songIdList) {
+                                    if (songIdList.indexOf(songId) != 0) {
+                                        url += "&";
+                                    }
+
+                                    String song = "ids[]=" + songId;
+                                    url += song;
+                                }
+
+                                final Intent intent = new Intent(view.getContext(), SongActivity.class);
+                                intent.putExtra("songurl", url);
+                                startActivity(intent);
+                            }
+
+
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-        }
-
+        });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,4 +175,5 @@ public class PlaylistActivity extends ListActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

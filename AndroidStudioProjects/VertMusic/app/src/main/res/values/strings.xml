@@ -16,5 +16,6 @@
     <string name="vertLogo">vertLogo</string>
     <string name="title_activity_playlist">Playlists</string>
     <string name="errorText">nothing</string>
+    <string name="title_activity_song">SongActivity</string>
 
 </resources>
