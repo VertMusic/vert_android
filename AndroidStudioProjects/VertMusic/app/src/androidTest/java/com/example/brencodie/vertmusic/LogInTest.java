@@ -1,15 +1,13 @@
 package com.example.brencodie.vertmusic;
 
-import android.app.ActionBar;
+import android.app.Application;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
+import android.test.ActivityInstrumentationTestCase2;
+import android.test.ApplicationTestCase;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,49 +23,75 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Created by brenbln on 3/24/15.
+ */
+public class LogInTest extends ActivityInstrumentationTestCase2<LogIn> {
 
-public class LogIn extends ActionBarActivity {
-
+    Button signInButton;
+    Button registerButton;
+    LogIn activity;
     public final static String ACCESS_TOKEN = "com.example.brencodie.ACCESS";
     public final static String USER_ID = "com.example.brencodie.ID";
     private String accessTokenValue;
     private String userIdValue;
     private JSONObject logInfo;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
-        setContentView(R.layout.activity_log_in);
+    public LogInTest() {
+        super(LogIn.class);
     }
 
-    public void onRegisterClick(View view) {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        activity = getActivity();
     }
 
     /*
-     * Handle log-in.
+    http://stackoverflow.com/questions/23060921/android-test-activityinstrumentationtestcase2-test-2-buttons-where-each-one
      */
-    public void onSignInClick(View view) {
-        final Intent intent = new Intent(this, PlaylistActivity.class);
-        EditText user = (EditText) findViewById(R.id.email); // Assign variable user to the e-mail id
-        EditText pass = (EditText) findViewById(R.id.password); // Assign variable pass to the password id
-        String usernameValue = user.getText().toString(); // Convert user text field into string and assign to usernameValue
-        String passwordValue = pass.getText().toString(); // Convert pass text field into string and assign to passwordValue
+//    public void testRegistrationButton() {
+//
+//        assertNotNull(activity);
+//        registerButton = (Button) activity.findViewById(R.id.user_sign_in_button);
+//
+//        activity.runOnUiThread(new Runnable() {
+//            public void run() {
+//                registerButton.performClick();
+//            }
+//        });
+//
+//        getInstrumentation().waitForIdleSync();
+//    }
 
-        RequestQueue queue = Volley.newRequestQueue(this); // Creates a request of this instance?
+    public void testSignInButton () {
+
+        final Intent intent = new Intent(activity, PlaylistActivity.class);
+        signInButton = (Button) activity.findViewById(R.id.user_sign_in_button);
+        EditText user = (EditText) activity.findViewById(R.id.email); // Assign variable user to the e-mail id
+        EditText pass = (EditText) activity.findViewById(R.id.password); // Assign variable pass to the password id
+
+        // assertEquals("", user.getText().toString());
+        // assertNull("Username field:", user);
+
+        RequestQueue queue = Volley.newRequestQueue(activity); // Creates a request of this instance?
 
         ///{"session":{"username":"dev","password":"password"}}
         Map sessionInfo = new HashMap();
-        sessionInfo.put("username", usernameValue);
-        sessionInfo.put("password", passwordValue);
+        sessionInfo.put("username", "");
+        sessionInfo.put("password", "");
 
         final Map requestObject = new HashMap();
         requestObject.put("session", sessionInfo);
 
         JSONObject json = new JSONObject(requestObject);
         String url = "http://192.168.56.101:8080/vert/data/session";
+
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                signInButton.performClick();
+            }
+        });
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, json,
                 new Response.Listener<JSONObject>() {
@@ -86,9 +110,11 @@ public class LogIn extends ActionBarActivity {
                             e.printStackTrace();
                         }
 
+
                         intent.putExtra(ACCESS_TOKEN, accessTokenValue);
                         intent.putExtra(USER_ID, userIdValue);
-                        startActivity(intent);
+                        activity.startActivity(intent);
+
 
                         /// "authorization": response.get("authToken");
                     }
@@ -99,34 +125,15 @@ public class LogIn extends ActionBarActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.i("Login", "Error: " + error.toString());
                         ///TODO: let user know login failed
-                        Toast.makeText(getBaseContext(), "Invalid information entered.", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(activity.getBaseContext(), "Invalid information entered.", Toast.LENGTH_LONG).show();
 
                     }
                 });
-
         queue.add(request);
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_log_in, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
-    }
 }

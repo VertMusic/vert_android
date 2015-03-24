@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/playlist"
-    android:background="#ff333333"
+    android:background="#ffffffff"
     android:clickable="false"
     tools:context="com.example.brencodie.vertmusic.SongActivity">
 

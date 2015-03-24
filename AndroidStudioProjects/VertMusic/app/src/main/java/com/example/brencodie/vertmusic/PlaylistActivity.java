@@ -42,6 +42,8 @@ public class PlaylistActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist);
         Intent intent = getIntent();
+        accessToken = intent.getStringExtra(LogIn.ACCESS_TOKEN);
+
         getPlaylists(intent);
 
         handleSongURL();
@@ -50,7 +52,6 @@ public class PlaylistActivity extends ListActivity {
     }
 
     private void getPlaylists(Intent intent) {
-        accessToken = intent.getStringExtra(LogIn.ACCESS_TOKEN);
         userId = intent.getStringExtra(LogIn.USER_ID);
 
         String url = "http://192.168.56.101:8080/vert/data/playlists";
@@ -138,6 +139,7 @@ public class PlaylistActivity extends ListActivity {
 
                                 final Intent intent = new Intent(view.getContext(), SongActivity.class);
                                 intent.putExtra("songurl", url);
+                                intent.putExtra("authorization", accessToken);
                                 startActivity(intent);
                             }
 

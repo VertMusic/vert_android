@@ -43,6 +43,7 @@ public class SongActivity extends ListActivity {
 
     private void getSongs(Intent intent) {
         String url = intent.getStringExtra("songurl");
+        final String authorization = intent.getStringExtra("authorization");
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -82,10 +83,18 @@ public class SongActivity extends ListActivity {
                         // TODO Auto-generated method stub
                         Log.i("Songs", "Error: " + error.toString());
                     }
-                });
-
+                })
+        {
+        @Override
+        public Map<String, String> getHeaders() {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("authorization", authorization);
+            return params;
+        }
+    };
 
         queue.add(request);
+
 
 
 
