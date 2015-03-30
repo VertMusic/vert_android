@@ -17,5 +17,8 @@
     <string name="title_activity_playlist">Playlists</string>
     <string name="errorText">nothing</string>
     <string name="title_activity_song">SongActivity</string>
+    <string name="title_activity_player">Player</string>
+    <string name="pause">Pause</string>
+    <string name="play">Play</string>
 
 </resources>

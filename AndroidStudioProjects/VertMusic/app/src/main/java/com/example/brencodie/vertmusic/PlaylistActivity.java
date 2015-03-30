@@ -114,14 +114,15 @@ public class PlaylistActivity extends ListActivity {
                 String playlistName = parent.getItemAtPosition(position).toString();
                 songIdList = new ArrayList();
 
+                // Search playlistInfo for a playlist with the matching playlist that was clicked
                 for (int i = 0; i < playlistInfo.length(); i++) {
                     try {
                         if (playlistName.equals(playlistInfo.getJSONObject(i).getString("name"))) {
 
-                            if (playlistInfo.getJSONObject(i).getJSONArray("songs").length() >= 1) {
+                            if (playlistInfo.getJSONObject(i).getJSONArray("songs").length() >= 1) { // If there more than one songs in the array
                                 try {
                                     for (int j = 0; j < playlistInfo.getJSONObject(i).getJSONArray("songs").length(); j++) {
-                                        songIdList.add(playlistInfo.getJSONObject(i).getJSONArray("songs").getString(j));
+                                        songIdList.add(playlistInfo.getJSONObject(i).getJSONArray("songs").getString(j)); // Add the id of the song to songIdList
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

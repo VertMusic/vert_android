@@ -82,13 +82,16 @@ public class LogIn extends ActionBarActivity {
                             logInfo = response.getJSONObject("session"); // Acquire the JSON object containing authentication token and userId
                             accessTokenValue = logInfo.getString("accessToken"); // Save the authentication token string
                             userIdValue = logInfo.getString("userId"); // Save the userId string
+
+                            intent.putExtra(ACCESS_TOKEN, accessTokenValue);
+                            intent.putExtra(USER_ID, userIdValue);
+                            startActivity(intent);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
-                        intent.putExtra(ACCESS_TOKEN, accessTokenValue);
-                        intent.putExtra(USER_ID, userIdValue);
-                        startActivity(intent);
+
 
                         /// "authorization": response.get("authToken");
                     }
@@ -105,6 +108,7 @@ public class LogIn extends ActionBarActivity {
                 });
 
         queue.add(request);
+
 
     }
 

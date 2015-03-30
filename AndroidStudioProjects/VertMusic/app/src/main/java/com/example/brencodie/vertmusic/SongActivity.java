@@ -2,6 +2,8 @@ package com.example.brencodie.vertmusic;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +35,9 @@ import java.util.Map;
 public class SongActivity extends ListActivity {
 
     private JSONArray songListInfo;
+    private List<Map<String,String>> songs;
+    private ArrayList<String> songTitles;
+    private ArrayList<String> songArtists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +45,9 @@ public class SongActivity extends ListActivity {
         setContentView(R.layout.activity_song);
         Intent intent = getIntent();
         getSongs(intent);
+        handlePlayer();
     }
+
 
     private void getSongs(Intent intent) {
         String url = intent.getStringExtra("songurl");
@@ -54,14 +62,14 @@ public class SongActivity extends ListActivity {
                     public void onResponse(JSONObject response) {
                         Log.i("Songs", "Success: " + response.toString());
 
-                        List<Map<String,String>> songs = new ArrayList<Map<String,String>>();
-
+                        songs = new ArrayList<Map<String,String>>();
+                        Map<String,String> songData;
 
                         try {
                             songListInfo = response.getJSONArray("songs");
 
                             for (int i = 0; i < songListInfo.length(); i++) {
-                                Map<String,String> songData = new HashMap<String,String>();
+                                songData = new HashMap<String,String>();
                                 songData.put("title", songListInfo.getJSONObject(i).getString("title"));
                                 songData.put("artist", songListInfo.getJSONObject(i).getString("artist"));
                                 songs.add(songData);
@@ -69,6 +77,7 @@ public class SongActivity extends ListActivity {
 
                            SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), songs, android.R.layout.simple_list_item_2, new String[] {"title", "artist"}, new int[] {android.R.id.text1, android.R.id.text2});
                            getListView().setAdapter(adapter);
+                          // handlePlayer();
 
 
                         } catch (JSONException e) {
@@ -94,11 +103,69 @@ public class SongActivity extends ListActivity {
     };
 
         queue.add(request);
-
-
-
-
     }
+
+    private void handlePlayer() {
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               // Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " is selected. Position number: " + position, Toast.LENGTH_LONG).show();
+                String songInfo = parent.getItemAtPosition(position).toString();
+                String songTitle = "";
+                String songArtist = "";
+
+                for (int i = 0; i < songs.size(); i++) {
+                    if (songInfo.equals(songs.get(i).toString())) {
+                        songTitle = songs.get(i).get("title");
+                        songArtist = songs.get(i).get("artist");
+                    }
+                }
+
+                for (int i = 0; i < songListInfo.length(); i++) {
+                    try {
+                        if (checkMatchingSong(songTitle, songArtist, i)) {
+                            String url = "http://192.168.56.101:8080/vert/file/song/" + songListInfo.getJSONObject(i).getString("id");
+
+                            Log.i("URL", url);
+                            final Intent intent = new Intent(view.getContext(), Player.class);
+                            intent.putExtra("songurl", url);
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private boolean checkMatchingSong(String songTitle, String songArtist, int i) throws JSONException {
+        return songTitle.equals(songListInfo.getJSONObject(i).getString("title")) && songArtist.equals(songListInfo.getJSONObject(i).getString("artist"));
+    }
+
+//    private void handlePlaySong() {
+//
+//        String url = null; // your URL here
+//        try {
+//            url = "http://192.168.56.101:8080/vert/file/song/" + songListInfo.getJSONObject(1).getString("id");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        Log.i("URL:" , url);
+//        MediaPlayer mediaPlayer = new MediaPlayer();
+//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//        try {
+//            mediaPlayer.setDataSource(url);
+//            mediaPlayer.prepare();
+//            mediaPlayer.start();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            Log.i("Error streaming song at:", url);
+//        }
+//
+//    }
 
 
     @Override

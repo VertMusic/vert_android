@@ -64,74 +64,76 @@ public class LogInTest extends ActivityInstrumentationTestCase2<LogIn> {
 //        getInstrumentation().waitForIdleSync();
 //    }
 
-    public void testSignInButton () {
-
-        final Intent intent = new Intent(activity, PlaylistActivity.class);
-        signInButton = (Button) activity.findViewById(R.id.user_sign_in_button);
-        EditText user = (EditText) activity.findViewById(R.id.email); // Assign variable user to the e-mail id
-        EditText pass = (EditText) activity.findViewById(R.id.password); // Assign variable pass to the password id
-
-        // assertEquals("", user.getText().toString());
-        // assertNull("Username field:", user);
-
-        RequestQueue queue = Volley.newRequestQueue(activity); // Creates a request of this instance?
-
-        ///{"session":{"username":"dev","password":"password"}}
-        Map sessionInfo = new HashMap();
-        sessionInfo.put("username", "");
-        sessionInfo.put("password", "");
-
-        final Map requestObject = new HashMap();
-        requestObject.put("session", sessionInfo);
-
-        JSONObject json = new JSONObject(requestObject);
-        String url = "http://192.168.56.101:8080/vert/data/session";
-
-        activity.runOnUiThread(new Runnable() {
-            public void run() {
-                signInButton.performClick();
-            }
-        });
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, json,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("Login", "Success: " + response.toString());
-                        ///Look in Java DataController in vert_backend for response type
-                        ///TODO: transition to new activity where user can see their playlists
-
-                        try {
-                            logInfo = response.getJSONObject("session"); // Acquire the JSON object containing authentication token and userId
-                            accessTokenValue = logInfo.getString("accessToken"); // Save the authentication token string
-                            userIdValue = logInfo.getString("userId"); // Save the userId string
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        intent.putExtra(ACCESS_TOKEN, accessTokenValue);
-                        intent.putExtra(USER_ID, userIdValue);
-                        activity.startActivity(intent);
-
-
-                        /// "authorization": response.get("authToken");
-                    }
-                },
-                new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i("Login", "Error: " + error.toString());
-                        ///TODO: let user know login failed
-                        //Toast.makeText(activity.getBaseContext(), "Invalid information entered.", Toast.LENGTH_LONG).show();
-
-                    }
-                });
-        queue.add(request);
-
-    }
+//    public void testSignInButton () {
+//
+//        final Intent intent = new Intent(activity, PlaylistActivity.class);
+//        signInButton = (Button) activity.findViewById(R.id.user_sign_in_button);
+//        EditText user = (EditText) activity.findViewById(R.id.email); // Assign variable user to the e-mail id
+//        EditText pass = (EditText) activity.findViewById(R.id.password); // Assign variable pass to the password id
+//
+//        // assertEquals("", user.getText().toString());
+//        // assertNull("Username field:", user);
+//
+//        RequestQueue queue = Volley.newRequestQueue(activity); // Creates a request of this instance?
+//
+//        ///{"session":{"username":"dev","password":"password"}}
+//        Map sessionInfo = new HashMap();
+//        sessionInfo.put("username", "brenbln");
+//        sessionInfo.put("password", "password");
+//
+//        final Map requestObject = new HashMap();
+//        requestObject.put("session", sessionInfo);
+//
+//        JSONObject json = new JSONObject(requestObject);
+//        String url = "http://192.168.56.101:8080/vert/data/session";
+//
+//        activity.runOnUiThread(new Runnable() {
+//            public void run() {
+//                signInButton.performClick();
+//            }
+//        });
+//
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, json,
+//                new Response.Listener<JSONObject>() {
+//
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        Log.i("Login", "Success: " + response.toString());
+//                        ///Look in Java DataController in vert_backend for response type
+//                        ///TODO: transition to new activity where user can see their playlists
+//
+//                        try {
+//                            logInfo = response.getJSONObject("session"); // Acquire the JSON object containing authentication token and userId
+//                            accessTokenValue = logInfo.getString("accessToken"); // Save the authentication token string
+//                            userIdValue = logInfo.getString("userId"); // Save the userId string
+//
+//                            intent.putExtra(ACCESS_TOKEN, accessTokenValue);
+//                            intent.putExtra(USER_ID, userIdValue);
+//                            activity.startActivity(intent);
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//
+//
+//
+//                        /// "authorization": response.get("authToken");
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.i("Login", "Error: " + error.toString());
+//                        ///TODO: let user know login failed
+//                        //Toast.makeText(activity.getBaseContext(), "Invalid information entered.", Toast.LENGTH_LONG).show();
+//
+//                    }
+//                });
+//        queue.add(request);
+//        assertNull(logInfo);
+//    }
 
 
 
