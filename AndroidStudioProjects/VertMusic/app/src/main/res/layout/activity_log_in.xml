@@ -30,15 +30,16 @@
         android:fontFamily="normal"
         android:textStyle="bold"
         android:layout_below="@+id/LogInForm"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textSize="15dp" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
         android:contentDescription="@string/vertLogo"
-        android:src="@drawable/vertmusic"
-        android:layout_above="@+id/email"
+        android:src="@drawable/header"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -54,8 +55,10 @@
         android:layout_below="@+id/user_sign_in_button"
         android:layout_alignLeft="@+id/user_sign_in_button"
         android:layout_alignStart="@+id/user_sign_in_button"
+        android:layout_marginTop="59dp"
         android:layout_alignRight="@+id/user_sign_in_button"
-        android:layout_alignEnd="@+id/user_sign_in_button" />
+        android:layout_alignEnd="@+id/user_sign_in_button"
+        android:visibility="invisible" />
 
     <EditText
         android:id="@+id/email"
@@ -86,5 +89,16 @@
         android:layout_above="@+id/LogInForm"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loginPrompt"
+        android:id="@+id/textView"
+        android:textColor="#ff9fc847"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_above="@+id/email"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

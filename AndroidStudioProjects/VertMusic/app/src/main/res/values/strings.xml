@@ -20,5 +20,6 @@
     <string name="title_activity_player">Player</string>
     <string name="pause">Pause</string>
     <string name="play">Play</string>
+    <string name="loginPrompt">Please sign in</string>
 
 </resources>

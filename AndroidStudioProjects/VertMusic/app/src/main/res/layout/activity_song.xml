@@ -1,16 +1,16 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"  android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:id="@+id/playlist"
-    android:background="#ffffffff"
-    android:clickable="false"
-    tools:context="com.example.brencodie.vertmusic.SongActivity">
+    android:background="#ff333333"
+    tools:context="com.example.brencodie.vertmusic.SongActivity"
+    android:id="@+id/song_layout">
 
     <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
+        android:id="@+id/song_list"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
     </ListView>
 
-</RelativeLayout>
+</LinearLayout>

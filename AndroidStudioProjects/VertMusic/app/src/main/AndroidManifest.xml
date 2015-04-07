@@ -3,6 +3,8 @@
     package="com.example.brencodie.vertmusic" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
 
     <application
         android:allowBackup="true"
@@ -36,12 +38,9 @@
         </activity>
         <activity
             android:name=".SongActivity"
-            android:label="@string/title_activity_song" >
+            android:label="@string/title_activity_song">
         </activity>
-        <activity
-            android:name=".Player"
-            android:label="@string/title_activity_player" >
-        </activity>
+        <service android:name="com.example.brencodie.vertmusic.MusicService"/>
     </application>
 
 </manifest>

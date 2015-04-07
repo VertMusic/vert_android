@@ -43,12 +43,8 @@ public class PlaylistActivity extends ListActivity {
         setContentView(R.layout.activity_playlist);
         Intent intent = getIntent();
         accessToken = intent.getStringExtra(LogIn.ACCESS_TOKEN);
-
         getPlaylists(intent);
-
         handleSongURL();
-
-
     }
 
     private void getPlaylists(Intent intent) {
@@ -66,7 +62,6 @@ public class PlaylistActivity extends ListActivity {
 
                         try {
                             playlistInfo = response.getJSONArray("playlists");
-
                             playlistList = new ArrayList();
 
                             for (int i = 0; i < playlistInfo.length(); i++) {
@@ -77,8 +72,6 @@ public class PlaylistActivity extends ListActivity {
 
                             adapter = new ArrayAdapter(getListView().getContext(), android.R.layout.simple_list_item_1, playlistList);
                             getListView().setAdapter(adapter);
-
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();
