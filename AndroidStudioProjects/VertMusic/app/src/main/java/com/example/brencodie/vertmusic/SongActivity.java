@@ -79,6 +79,8 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
 
         SongAdapter songAdt = new SongAdapter(this, songList);
         songView.setAdapter(songAdt);
+        controller = new MusicController(this, false);
+
         setController();
     }
 
@@ -106,7 +108,7 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
 
     @Override
     protected void onStart() {
-        Log.d("SONGACTIVITYTEST", "SongActivity onStart");
+        Log.d("SONGACTIVITYTEST", "onStart");
         super.onStart();
         if(playIntent==null){
             Log.d("PLAYINTENT", "null");
@@ -125,12 +127,61 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
     }
 
     public void songPicked(View view){
-       // Log.i("Clicked:", view.getTag().toString());
-        //Log.i("Clicked,", songList.get(Integer.parseInt(view.getTag().toString())).getID());
+        Log.d("SONGACTIVITYTEST", "songPicked");
 
         musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
         musicSrv.playSong();
         if(playbackPaused){
+            Log.d("SONGACTIVITYTEST", "songPicked and playbackPaused");
+            setController();
+            playbackPaused=false;
+        }
+        controller.show(0);
+       
+
+    }
+
+    private void setController(){
+        //set the controller up
+        controller.setPrevNextListeners(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("SONGACTIVITY", "onClickNext");
+
+                playNext();
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("SONGACTIVITY", "onClickPrev");
+
+                playPrev();
+            }
+        });
+
+        controller.setMediaPlayer(this);
+        controller.setAnchorView(findViewById(R.id.song_layout));
+        controller.setEnabled(true);
+
+    }
+
+    //play next
+    private void playNext(){
+        musicSrv.playNext();
+        if(playbackPaused){
+            Log.d("SONGACTIVITYTEST", "playNext and playbackPaused");
+            setController();
+            playbackPaused=false;
+        }
+        controller.show(0);
+
+    }
+
+    //play previous
+    private void playPrev(){
+        musicSrv.playPrev();
+        if(playbackPaused){
+            Log.d("SONGACTIVITYTEST", "playPrev and playbackPaused");
             setController();
             playbackPaused=false;
         }
@@ -215,68 +266,35 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
         }
     }
 
-    private void setController(){
-        //set the controller up
-        controller = new MusicController(this, false);
-        controller.setPrevNextListeners(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playNext();
-            }
-        }, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playPrev();
-            }
-        });
-
-        controller.setMediaPlayer(this);
-        controller.setAnchorView(findViewById(R.id.song_layout));
-        controller.setEnabled(true);
-
-    }
-
-    //play next
-    private void playNext(){
-        musicSrv.playNext();
-        if(playbackPaused){
-            setController();
-            playbackPaused=false;
-        }
-        controller.show(0);
-    }
-
-    //play previous
-    private void playPrev(){
-        musicSrv.playPrev();
-        if(playbackPaused){
-            setController();
-            playbackPaused=false;
-        }
-        controller.show(0);
-    }
-
     @Override
     public void start() {
+        Log.d("SONGACTIVITYTEST", "start");
         musicSrv.go();
     }
 
     @Override
     public void pause() {
+        Log.d("SONGACTIVITYTEST", "pause");
+
         playbackPaused=true;
         musicSrv.pausePlayer();
     }
 
     @Override
     protected void onPause(){
+        Log.d("SONGACTIVITYTEST", "onPause");
+
         super.onPause();
         paused=true;
     }
 
     @Override
     protected void onResume(){
+        Log.d("SONGACTIVITYTEST", "onResume");
+
         super.onResume();
         if(paused){
+            Log.d("SONGACTIVITYTEST", "onResume and paused");
             setController();
             paused=false;
         }
