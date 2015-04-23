@@ -67,7 +67,7 @@ public class LogIn extends ActionBarActivity {
         requestObject.put("session", sessionInfo);
 
         JSONObject json = new JSONObject(requestObject);
-        String url = "http://192.168.56.101:8080/vert/data/session";
+        String url = Constants.IP_ADDRESS + "/vert/data/session";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, json,
                 new Response.Listener<JSONObject>() {

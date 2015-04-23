@@ -82,7 +82,7 @@ public class PlaylistActivity extends ListActivity{
     private void getPlaylists(Intent intent) {
         userId = intent.getStringExtra(LogIn.USER_ID);
 
-        String url = "http://192.168.56.101:8080/vert/data/playlists";
+        String url = Constants.IP_ADDRESS + "/vert/data/playlists";
         RequestQueue queue = Volley.newRequestQueue(this);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -153,7 +153,7 @@ public class PlaylistActivity extends ListActivity{
                                     e.printStackTrace();
                                 }
 
-                                String url = "http://192.168.56.101:8080/vert/data/songs?";
+                                String url = Constants.IP_ADDRESS + "/vert/data/songs?";
                                 for (String songId : songIdList) {
                                     if (songIdList.indexOf(songId) != 0) {
                                         url += "&";

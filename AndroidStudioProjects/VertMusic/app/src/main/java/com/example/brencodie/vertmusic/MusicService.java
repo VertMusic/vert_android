@@ -94,7 +94,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         //get id
         String currSong = playSong.getID();
         //set URL of song
-        String trackURL = "http://192.168.56.101:8080/vert/file/song/" + currSong;
+        String trackURL = Constants.IP_ADDRESS + "/vert/file/song/" + currSong;
         Log.i("URL:", trackURL);
 
         try{
