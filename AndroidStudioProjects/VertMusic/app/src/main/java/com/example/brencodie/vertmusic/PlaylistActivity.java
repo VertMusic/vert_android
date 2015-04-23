@@ -3,6 +3,8 @@ package com.example.brencodie.vertmusic;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,8 +28,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
-public class PlaylistActivity extends ListActivity {
+/**
+ * Outdated code... Need to rewrite this using the method from song
+ */
+
+public class PlaylistActivity extends ListActivity{
 
     private String accessToken;
     private String userId;
@@ -35,12 +44,35 @@ public class PlaylistActivity extends ListActivity {
     private ArrayList<String> songIdList;
     private ArrayList<String> playlistList;
     private ArrayAdapter<String> adapter;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     //public final static String SONG_URL = "com.example.brencodie.songurl";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Intent intent = getIntent();
+                        accessToken = intent.getStringExtra(LogIn.ACCESS_TOKEN);
+                        getPlaylists(intent);
+                        handleSongURL();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 2500);
+            }
+        });
+
         Intent intent = getIntent();
         accessToken = intent.getStringExtra(LogIn.ACCESS_TOKEN);
         getPlaylists(intent);
@@ -69,8 +101,8 @@ public class PlaylistActivity extends ListActivity {
                                 playlistList.add(playlistName);
                                 // Log.i("Name of playlist:", playlistName);
                             }
+                            adapter = new ArrayAdapter(getListView().getContext(), R.layout.playlistview, playlistList);
 
-                            adapter = new ArrayAdapter(getListView().getContext(), android.R.layout.simple_list_item_1, playlistList);
                             getListView().setAdapter(adapter);
 
                         } catch (JSONException e) {
@@ -103,7 +135,7 @@ public class PlaylistActivity extends ListActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " is selected. Position number: " + position, Toast.LENGTH_LONG).show();
+               // Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " is selected. Position number: " + position, Toast.LENGTH_LONG).show();
                 String playlistName = parent.getItemAtPosition(position).toString();
                 songIdList = new ArrayList();
 
@@ -149,7 +181,6 @@ public class PlaylistActivity extends ListActivity {
         });
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -171,5 +202,4 @@ public class PlaylistActivity extends ListActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }

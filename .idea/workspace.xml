@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a455561-cba7-47b0-b021-a347c4e52175" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidStudioProjects/VertMusic/app/src/main/java/com/example/brencodie/vertmusic/LogIn.java" afterPath="$PROJECT_DIR$/AndroidStudioProjects/VertMusic/app/src/main/java/com/example/brencodie/vertmusic/LogIn.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidStudioProjects/VertMusic/app/src/androidTest/java/com/example/brencodie/vertmusic/LogInTest.java" afterPath="$PROJECT_DIR$/AndroidStudioProjects/VertMusic/app/src/androidTest/java/com/example/brencodie/vertmusic/LogInTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidStudioProjects/VertMusic/app/src/main/java/com/example/brencodie/vertmusic/PlaylistActivity.java" afterPath="$PROJECT_DIR$/AndroidStudioProjects/VertMusic/app/src/main/java/com/example/brencodie/vertmusic/PlaylistActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidStudioProjects/VertMusic/app/src/main/java/com/example/brencodie/vertmusic/SongActivity.java" afterPath="$PROJECT_DIR$/AndroidStudioProjects/VertMusic/app/src/main/java/com/example/brencodie/vertmusic/SongActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidStudioProjects/VertMusic/app/src/main/res/layout/activity_playlist.xml" afterPath="$PROJECT_DIR$/AndroidStudioProjects/VertMusic/app/src/main/res/layout/activity_playlist.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="vert_android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -61,7 +61,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
@@ -77,6 +76,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane" />
     </panes>
   </component>
@@ -195,7 +195,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32599118" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3215859" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />

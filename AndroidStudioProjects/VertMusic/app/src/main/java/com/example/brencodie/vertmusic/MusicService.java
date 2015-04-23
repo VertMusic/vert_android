@@ -13,13 +13,17 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import java.util.Random;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.widget.TextView;
 
 /**
  * Created by Bren Codie on 4/5/2015.
+ * Based off of code from the following tutorial:
+ * http://code.tutsplus.com/tutorials/create-a-music-player-on-android-project-setup--mobile-22764
  */
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener {
@@ -32,6 +36,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private static final int NOTIFY_ID=1;
     private boolean shuffle=false;
     private Random rand;
+    private TextView songTitleArtist;
 
     public void onCreate() {
         Log.d("SERVICETEST", "MusicService onCreate");
@@ -50,11 +55,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
         player.setOnErrorListener(this);
-    }
-
-    public void setShuffle(){
-        if(shuffle) shuffle=false;
-        else shuffle=true;
     }
 
     public void setList(ArrayList<Song> theSongs) {
@@ -115,6 +115,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         return songs.get(songPosn).getTitle();
     }
 
+    public String getSongArtist() {
+        return songs.get(songPosn).getArtist();
+    }
+
     @Override
     public void onCompletion(MediaPlayer mp) {
         if(player.getCurrentPosition() > 0){
@@ -133,6 +137,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     @Override
     public void onPrepared(MediaPlayer mp) {
         //start playback
+        Log.d("MUSICSERVICETEST", "onPrepared");
         mp.start();
         Intent notIntent = new Intent(this, SongActivity.class);
         notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -140,6 +145,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+
+       Intent onPreparedIntent = new Intent("MEDIA_PLAYER_PREPARED");
+       LocalBroadcastManager.getInstance(this).sendBroadcast(onPreparedIntent);
+
 
         builder.setContentIntent(pendInt)
                 .setSmallIcon(R.drawable.play)

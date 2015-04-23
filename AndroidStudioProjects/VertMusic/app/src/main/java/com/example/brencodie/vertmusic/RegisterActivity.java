@@ -15,7 +15,12 @@ import com.android.volley.RequestQueue;
 
 import org.json.JSONObject;
 
-
+/**
+ * Not being used
+ *
+ *
+ *
+ **/
 public class RegisterActivity extends ActionBarActivity {
 
     @Override

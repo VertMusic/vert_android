@@ -5,12 +5,23 @@
     android:orientation="vertical"
     android:background="#ff333333"
     tools:context="com.example.brencodie.vertmusic.SongActivity"
-    android:id="@+id/song_layout">
+    android:id="@+id/song_layout"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/song_title_artist"
+        android:textColor="#ff9fc847"
+        android:textSize="18sp"
+        android:layout_weight="0.13" />
 
     <ListView
         android:id="@+id/song_list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="409dp"
+        android:layout_weight="0.93"
+        android:paddingTop="0dp">
     </ListView>
 
 </LinearLayout>
