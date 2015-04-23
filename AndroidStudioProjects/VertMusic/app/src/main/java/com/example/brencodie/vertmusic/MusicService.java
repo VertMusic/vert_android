@@ -141,24 +141,23 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mp.start();
         Intent notIntent = new Intent(this, SongActivity.class);
         notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendInt = PendingIntent.getActivity(this, 0,
-                notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent pendInt = PendingIntent.getActivity(this, 0,
+//               notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        //NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
        Intent onPreparedIntent = new Intent("MEDIA_PLAYER_PREPARED");
        LocalBroadcastManager.getInstance(this).sendBroadcast(onPreparedIntent);
 
-
-        builder.setContentIntent(pendInt)
-                .setSmallIcon(R.drawable.play)
-                .setTicker(songTitle)
-                .setOngoing(true)
-                .setContentTitle("Playing")
-        .setContentText(songTitle);
-        Notification not = builder.build();
-
-        startForeground(NOTIFY_ID, not);
+//        builder.setContentIntent(pendInt)
+//                .setSmallIcon(R.drawable.play)
+//                .setTicker(songTitle)
+//                .setOngoing(true)
+//                .setContentTitle("Playing")
+//        .setContentText(songTitle);
+//        Notification not = builder.build();
+//
+//        startForeground(NOTIFY_ID, not);
     }
 
     public int getPosn(){
