@@ -144,10 +144,10 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
         }
     }
 
-    //connect to the service
+    /**
+     * Connects to the MusicService class, allowing the music player to run in the background.
+     */
     private ServiceConnection musicConnection = new ServiceConnection(){
-
-
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d("Service", "Connected!");
@@ -166,6 +166,10 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
         }
     };
 
+    /**
+     * @param view
+     * Handles what happens when a song is pressed.
+     */
     public void songPicked(View view){
         Log.d("SONGACTIVITYTEST", "songPicked");
 
@@ -182,6 +186,9 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
         controller.show(0);
     }
 
+    /**
+     * Receives a broadcast from the service class when onPrepared is called, and then updates the music player display.
+     */
     private BroadcastReceiver onPrepareReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context c, Intent i) {
@@ -196,6 +203,9 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
         if (click) songTitleArtistView.startAnimation(AnimationUtils.loadAnimation(SongActivity.this, android.R.anim.slide_in_left));
     }
 
+    /**
+     * Sets listeners for the media player, and also configures its location on the screen.
+     */
     private void setController(){
 
         //set the controller up
@@ -212,14 +222,14 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
                 playPrev();
             }
         });
-
         controller.setMediaPlayer(this);
         controller.setAnchorView(findViewById(R.id.song_layout));
         controller.setEnabled(true);
-
     }
 
-    //play next
+    /**
+     * Handles playing the next song
+     */
     private void playNext(){
         Log.d("SONGACTIVITYTEST", "playNext");
         musicSrv.playNext();
@@ -234,7 +244,9 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
 
     }
 
-    //play previous
+    /**
+     * Handles playing the previous song
+     */
     private void playPrev(){
         Log.d("SONGACTIVITYTEST", "playPrev");
         musicSrv.playPrev();
@@ -248,6 +260,9 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
        controller.show(0);
     }
 
+    /**
+     * Makes a Volley request to acquire the list of songs.
+     */
     private void getSongs() {
         String url = intent.getStringExtra("songurl");
         final String authorization = intent.getStringExtra("authorization");
@@ -289,12 +304,18 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
         queue.add(request);
     }
 
+    /**
+     * Makes a call to the service class to start the song.
+     */
     @Override
     public void start() {
         Log.d("SONGACTIVITYTEST", "start");
         musicSrv.go();
     }
 
+    /**
+     * When pause is pressed, this will make a call to the service class to pause the player.
+     */
     @Override
     public void pause() {
         Log.d("SONGACTIVITYTEST", "pause");
@@ -303,22 +324,25 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
         musicSrv.pausePlayer();
     }
 
+    /**
+     * A listener that checks for pause.
+     */
     @Override
     protected void onPause(){
         Log.d("SONGACTIVITYTEST", "onPause");
-
         super.onPause();
         paused=true;
     }
 
+    /**
+     * Checks when a song is resumed.
+     */
     @Override
     protected void onResume(){
         Log.d("SONGACTIVITYTEST", "onResume");
-
         // Set up receiver for media player onPrepared broadcast
         LocalBroadcastManager.getInstance(this).registerReceiver(onPrepareReceiver,
                 new IntentFilter("MEDIA_PLAYER_PREPARED"));
-
         super.onResume();
         if(paused){
             Log.d("SONGACTIVITYTEST", "onResume and paused");
@@ -347,6 +371,11 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
             return 0;
     }
 
+    /**
+     * Gets the position of the song in the list of songs
+     * Overrides a method in the built-in MediaController
+     * @return
+     */
     @Override
     public int getCurrentPosition() {
         if(musicSrv!=null && musicBound && musicSrv.isPng()) {
@@ -357,12 +386,20 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
             return 0;
     }
 
+    /**
+     * Makes a call to the service class when seeking through a song
+     * @param pos
+     */
     @Override
     public void seekTo(int pos) {
         Log.d("SONGACTIVITYTEST", "seekTo");
         musicSrv.seek(pos);
     }
 
+    /**
+     * Checks whether a song is playing or not
+     * @return
+     */
     @Override
     public boolean isPlaying() {
         if(musicSrv!=null && musicBound) {
@@ -373,6 +410,10 @@ public class SongActivity extends ActionBarActivity implements MediaPlayerContro
         return false;
     }
 
+    /**
+     * Overrides other methods from the MediaController class that enables whether the user will be allowed to pause and seek. Also defines getBufferPercentage and getAudioSessionID
+     *
+     **/
     @Override
     public int getBufferPercentage() {
         return 0;

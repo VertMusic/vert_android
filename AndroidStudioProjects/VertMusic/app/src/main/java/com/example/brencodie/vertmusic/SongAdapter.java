@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 /**
  * Created by Bren Codie on 4/5/2015.
+ * Adapters are used when creating lists/custom lists.
  */
 public class SongAdapter extends BaseAdapter {
 
@@ -40,6 +41,13 @@ public class SongAdapter extends BaseAdapter {
         return 0;
     }
 
+    /**
+     * This will build the listview of songs using the song.xml layout
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //map to song layout

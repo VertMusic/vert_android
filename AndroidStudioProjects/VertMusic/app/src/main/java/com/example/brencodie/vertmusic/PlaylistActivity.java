@@ -33,10 +33,11 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 /**
- * Outdated code... Need to rewrite this using the method from song
+ * PlaylistActivity
+ * Builds a list of playlists
  */
 
-public class PlaylistActivity extends ListActivity{
+public class PlaylistActivity extends ListActivity {
 
     private String accessToken;
     private String userId;
@@ -44,10 +45,7 @@ public class PlaylistActivity extends ListActivity{
     private ArrayList<String> songIdList;
     private ArrayList<String> playlistList;
     private ArrayAdapter<String> adapter;
-
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    //public final static String SONG_URL = "com.example.brencodie.songurl";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +77,11 @@ public class PlaylistActivity extends ListActivity{
         handleSongURL();
     }
 
+    /**
+     *
+     * @param intent
+     * Retrieves the playlists of the logged in user and builds/displays a list on the screen.
+     */
     private void getPlaylists(Intent intent) {
         userId = intent.getStringExtra(LogIn.USER_ID);
 
@@ -102,7 +105,6 @@ public class PlaylistActivity extends ListActivity{
                                 // Log.i("Name of playlist:", playlistName);
                             }
                             adapter = new ArrayAdapter(getListView().getContext(), R.layout.playlistview, playlistList);
-
                             getListView().setAdapter(adapter);
 
                         } catch (JSONException e) {
@@ -130,6 +132,10 @@ public class PlaylistActivity extends ListActivity{
         queue.add(request);
     }
 
+    /**
+     * Used to build the URL that will link to a song.
+     * This part needed to be cleaned up...
+     */
     private void handleSongURL() {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -142,12 +148,12 @@ public class PlaylistActivity extends ListActivity{
                 // Search playlistInfo for a playlist with the matching playlist that was clicked
                 for (int i = 0; i < playlistInfo.length(); i++) {
                     try {
-                        if (playlistName.equals(playlistInfo.getJSONObject(i).getString("name"))) {
+                        if (playlistName.equals(playlistInfo.getJSONObject(i).getString("name"))) { // If the item pressed has the same name as the current iteration within the playlist
 
                             if (playlistInfo.getJSONObject(i).getJSONArray("songs").length() >= 1) { // If there more than one songs in the array
                                 try {
                                     for (int j = 0; j < playlistInfo.getJSONObject(i).getJSONArray("songs").length(); j++) {
-                                        songIdList.add(playlistInfo.getJSONObject(i).getJSONArray("songs").getString(j)); // Add the id of the song to songIdList
+                                        songIdList.add(playlistInfo.getJSONObject(i).getJSONArray("songs").getString(j)); // Add the id of the song to songIdList; continue adding until no songs are left
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -156,7 +162,7 @@ public class PlaylistActivity extends ListActivity{
                                 String url = Constants.IP_ADDRESS + "/vert/data/songs?";
                                 for (String songId : songIdList) {
                                     if (songIdList.indexOf(songId) != 0) {
-                                        url += "&";
+                                        url += "&"; // Add all IDs to the URL
                                     }
 
                                     String song = "ids[]=" + songId;
@@ -168,9 +174,6 @@ public class PlaylistActivity extends ListActivity{
                                 intent.putExtra("authorization", accessToken);
                                 startActivity(intent);
                             }
-
-
-
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

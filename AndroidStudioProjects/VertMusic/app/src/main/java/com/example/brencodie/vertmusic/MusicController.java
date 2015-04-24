@@ -5,6 +5,7 @@ import android.widget.MediaController;
 
 /**
  * Created by Bren Codie on 4/6/2015.
+ * Extending MediaController allows you to control/modify the built in class MediaController.
  */
 public class MusicController extends MediaController {
 
@@ -12,5 +13,10 @@ public class MusicController extends MediaController {
         super(c, useFastForward);
     }
 
+    /**
+     * Overrides the hide function of MediaController
+     */
     public void hide() {}
+
+
 }

@@ -22,8 +22,13 @@ import android.widget.TextView;
 
 /**
  * Created by Bren Codie on 4/5/2015.
- * Based off of code from the following tutorial:
+ * Used the following tutorial to build the actual media player:
  * http://code.tutsplus.com/tutorials/create-a-music-player-on-android-project-setup--mobile-22764
+ * Tutorial assumes that you are playing songs from phone; modified to play songs from a stream instead. Also added
+ * a broadcast manager and disabled a few features/fixed some issues in the original tutorial.
+ *
+ * A class that extends Service will run in the background. This class will run the media player in the background, letting
+ * songs play in the background.
  */
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener {
@@ -32,11 +37,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private ArrayList<Song> songs;
     private int songPosn;
     private final IBinder musicBind = new MusicBinder();
-    private String songTitle="";
     private static final int NOTIFY_ID=1;
     private boolean shuffle=false;
     private Random rand;
-    private TextView songTitleArtist;
 
     public void onCreate() {
         Log.d("SERVICETEST", "MusicService onCreate");
@@ -47,6 +50,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         initMusicPlayer();
     }
 
+    /**
+     * Sets the media player up.
+     */
     public void initMusicPlayer() {
         Log.d("SERVICETEST", "MusicService initMusicPlayer");
         player.setWakeMode(getApplicationContext(),
@@ -57,11 +63,18 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         player.setOnErrorListener(this);
     }
 
+    /**
+     * Sets the list of songs to use.
+     * @param theSongs
+     */
     public void setList(ArrayList<Song> theSongs) {
         Log.d("SERVICETEST", "List set");
         songs = theSongs;
     }
 
+    /**
+     * Uses in SongActivity.class to connect or bind to this service.
+     */
     public class MusicBinder extends Binder {
         MusicService getService() {
             Log.d("SERVICETEST", "Returning service");
@@ -69,13 +82,22 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
-
+    /**
+     * Checks whether the service has been bound
+     * @param intent
+     * @return
+     */
     @Override
     public IBinder onBind(Intent intent) {
         Log.d("SERVICETEST", "MusicService onBind");
         return musicBind;
     }
 
+    /**
+     * Handles cases in which the service is disconnected; the player is stopped
+     * @param intent
+     * @return
+     */
     @Override
     public boolean onUnbind(Intent intent){
         Log.d("SERVICETEST", "MusicService onUnbind");
@@ -84,13 +106,15 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         return false;
     }
 
+    /**
+     * Takes the URL from a song and plays it
+     */
     public void playSong(){
         //play a song
         player.reset();
 
         //get song
         Song playSong = songs.get(songPosn);
-        songTitle=playSong.getTitle();
         //get id
         String currSong = playSong.getID();
         //set URL of song
@@ -107,18 +131,34 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         player.prepareAsync();
     }
 
+    /**
+     * Sets the position of the song
+     * @param songIndex
+     */
     public void setSong(int songIndex){
         songPosn=songIndex;
     }
 
+    /**
+     * Returns title of current song playing
+     * @return
+     */
     public String getSongTitle() {
         return songs.get(songPosn).getTitle();
     }
 
+    /**
+     * Returns title of artist of song playing
+     * @return
+     */
     public String getSongArtist() {
         return songs.get(songPosn).getArtist();
     }
 
+    /**
+     * Runs when a song completes on its own
+     * @param mp
+     */
     @Override
     public void onCompletion(MediaPlayer mp) {
         if(player.getCurrentPosition() > 0){
@@ -127,13 +167,24 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
+    /**
+     * Handles errors with the media player
+     * @param mp
+     * @param what
+     * @param extra
+     * @return
+     */
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         mp.reset();
         return false;
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    /**
+     * Runs whenever the media player plays a song for the first time. Contains a broadcast manager to update the player automatically.
+     * @param mp
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN) // Not one hundred percent sure what this part does, but assuming it targets a specific Android version
     @Override
     public void onPrepared(MediaPlayer mp) {
         //start playback
@@ -160,37 +211,64 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 //        startForeground(NOTIFY_ID, not);
     }
 
+    /**
+     * Returns the player's current position
+     * @return
+     */
     public int getPosn(){
         return player.getCurrentPosition();
     }
 
+    /**
+     * Returns the duration of the song playing
+     * @return
+     */
     public int getDur(){
         return player.getDuration();
     }
 
+    /**
+     * Returns true if a song is playing
+     * @return
+     */
     public boolean isPng(){
         return player.isPlaying();
     }
 
+    /**
+     * Pauses the player when called
+     */
     public void pausePlayer(){
         player.pause();
     }
 
+    /**
+     * Handles seeking within a track
+     * @param posn
+     */
     public void seek(int posn){
         player.seekTo(posn);
     }
 
+    /**
+     * Starts the player when called
+     */
     public void go(){
         player.start();
     }
 
+    /**
+     * Handles the functionality for clicking on the Prev button
+     */
     public void playPrev(){
         songPosn--;
         if(songPosn < 0) songPosn=songs.size()-1;
         playSong();
     }
 
-    //skip to next
+    /**
+     * Handles functionality for clicking on the Next button
+     */
     public void playNext(){
         if(shuffle){
             int newSong = songPosn;
